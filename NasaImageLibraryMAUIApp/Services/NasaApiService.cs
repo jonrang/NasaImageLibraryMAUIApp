@@ -20,7 +20,7 @@ namespace NasaImageLibraryMAUIApp.Services
         {
             var encodedQuery = Uri.EscapeDataString(query);
 
-            var url = $"https://images-api.nasa.gov/search?q={encodedQuery}&media_type=image";
+            var url = $"search?q={encodedQuery}&media_type=image";
 
             using var response = await http.GetAsync(url, ct);
 
@@ -31,6 +31,29 @@ namespace NasaImageLibraryMAUIApp.Services
             }
             var dto = await response.Content.ReadFromJsonAsync<SearchResponse>(cancellationToken: ct);
             return dto?.Collection?.Items ?? new List<SearchItem>();
+        }
+
+        public async Task<string?> GetHighResImageUrlAsync(string nasaId)
+        {
+            var url = $"asset/{nasaId}";
+
+            try
+            {
+                var response = await http.GetFromJsonAsync<NasaAssetResponse>(url);
+
+                var items = response?.Collection?.Items;
+                if (items is null || items.Count == 0) return null;
+
+                var bestMatch = items.FirstOrDefault(x => x.Href.EndsWith("~medium.jpg"))
+                    ?? items.FirstOrDefault(x => x.Href.EndsWith("~small.jpg"))
+                    ?? items.FirstOrDefault();
+                
+                return bestMatch?.Href;
+            }
+            catch
+            {
+                return null;
+            }
         }
     }
 }

@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Text;
+﻿using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using NasaImageLibraryMAUIApp.Models;
 using NasaImageLibraryMAUIApp.Services;
+using NasaImageLibraryMAUIApp.Views;
 
 namespace NasaImageLibraryMAUIApp.ViewModels
 {
@@ -15,7 +13,9 @@ namespace NasaImageLibraryMAUIApp.ViewModels
         public ObservableCollection<SearchItem> SearchItems { get; set; }
         [ObservableProperty] private string searchQuery;
         [ObservableProperty] private bool isBusy;
+
         private string[] defaultTerms = { "galaxy", "black hole", "astronaut", "iss", "jupiter" };
+        
         public MainViewModel(INasaApiService apiService)
         {
             this.apiService = apiService;
@@ -54,6 +54,22 @@ namespace NasaImageLibraryMAUIApp.ViewModels
             {
                 IsBusy = false;
             }
+        }
+
+        [RelayCommand]
+        async Task GoToDetails(SearchItem item)
+        {
+            if (item is null) return;
+
+            var navParameter = new Dictionary<string, object>
+            {
+                {"id", item.Data[0].NasaId },
+                {"title", item.Data[0].Title },
+                {"description", item.Data[0].Description },
+                {"thumb", item.Links[0].Href }
+            };
+
+            await Shell.Current.GoToAsync(nameof(DetailsPage), navParameter);
         }
     }
 }

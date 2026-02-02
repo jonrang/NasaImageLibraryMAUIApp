@@ -1,0 +1,81 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:NasaImageLibraryMAUIApp.ViewModels"
+             xmlns:model="clr-namespace:NasaImageLibraryMAUIApp.Models"
+             x:Class="NasaImageLibraryMAUIApp.Views.MainPage"
+             x:DataType="vm:MainViewModel"
+             Title="NASA Gallery"
+             BackgroundColor="{AppThemeBinding Light=#f0f0f0, Dark=#121212}">
+
+    <Grid RowDefinitions="Auto, *">
+
+        <SearchBar Grid.Row="0"
+                   Placeholder="Search (e.g. Orion, Apollo)"
+                   Text="{Binding SearchQuery}"
+                   SearchCommand="{Binding PerformSearchCommand}"
+                   BackgroundColor="{AppThemeBinding Light=White, Dark=#1e1e1e}"
+                   Margin="10"/>
+
+        <CollectionView Grid.Row="1"
+                        ItemsSource="{Binding SearchItems}"
+                        SelectionMode="Single"
+                        SelectionChangedCommand="{Binding GoToDetailsCommand}"
+                        SelectionChangedCommandParameter="{Binding Source={RelativeSource Self}, Path=SelectedItem}"
+                        Margin="5">
+
+            <CollectionView.ItemsLayout>
+                <GridItemsLayout Orientation="Vertical" 
+                                 Span="2" 
+                                 HorizontalItemSpacing="10" 
+                                 VerticalItemSpacing="10"/>
+            </CollectionView.ItemsLayout>
+
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="model:SearchItem">
+
+                    <Border StrokeShape="RoundRectangle 10"
+                            StrokeThickness="0"
+                            Padding="0"
+                            BackgroundColor="{AppThemeBinding Light=White, Dark=#1e1e1e}">
+
+                        <Grid RowDefinitions="150, Auto">
+                            <Image Grid.Row="0"
+                                   Source="{Binding Links[0].Href}"
+                                   Aspect="AspectFill"
+                                   HeightRequest="150"
+                                   WidthRequest="180"/>
+
+                            <Label Grid.Row="1"
+                                   Text="{Binding Data[0].Title}"
+                                   FontSize="12"
+                                   MaxLines="2"
+                                   LineBreakMode="TailTruncation"
+                                   Padding="10,5,10,10"
+                                   TextColor="{AppThemeBinding Light=Black, Dark=White}"/>
+                        </Grid>
+
+                    </Border>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+
+            <CollectionView.EmptyView>
+                <VerticalStackLayout VerticalOptions="Center" HorizontalOptions="Center">
+                    <Label Text="🚀" FontSize="50" HorizontalOptions="Center"/>
+                    <Label Text="Start your search above!" FontSize="18" TextColor="Gray"/>
+                </VerticalStackLayout>
+            </CollectionView.EmptyView>
+
+        </CollectionView>
+
+        <ActivityIndicator Grid.Row="1"
+                           IsRunning="{Binding IsBusy}"
+                           IsVisible="{Binding IsBusy}"
+                           HorizontalOptions="Center"
+                           VerticalOptions="Center"
+                           Color="{StaticResource Primary}"
+                           HeightRequest="50"
+                           WidthRequest="50"/>
+    </Grid>
+
+</ContentPage>
