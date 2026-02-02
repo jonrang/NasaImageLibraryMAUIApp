@@ -14,8 +14,12 @@ namespace NasaImageLibraryMAUIApp.ViewModels
         [ObservableProperty] private string searchQuery;
         [ObservableProperty] private bool isBusy;
 
+        [ObservableProperty] string startYear;
+        [ObservableProperty] string endYear;
+        [ObservableProperty] bool showFilters;
+
         private string[] defaultTerms = { "galaxy", "black hole", "earth", "iss", "jupiter" };
-        
+
         public MainViewModel(INasaApiService apiService)
         {
             this.apiService = apiService;
@@ -30,20 +34,34 @@ namespace NasaImageLibraryMAUIApp.ViewModels
         [RelayCommand]
         private async Task PerformSearch()
         {
+            if (string.IsNullOrWhiteSpace(SearchQuery)) return;
             if (IsBusy) return;
+
+
+            int? start = int.TryParse(StartYear, out int s) ? s : null;
+            int? end = int.TryParse(EndYear, out int e) ? e : null;
+
+            if (start.HasValue && end.HasValue && start > end)
+            {
+                await Shell.Current.DisplayAlertAsync("Invalid Date", "Start Year cannot be after End Year.", "OK");
+                return;
+            }
+
             IsBusy = true;
 
             try
             {
+
                 var query = string.IsNullOrWhiteSpace(SearchQuery) ? defaultTerms[new Random().Next(defaultTerms.Length)] : SearchQuery;
 
-                var result = await apiService.GetSearchResult(query);
+                var result = await apiService.GetSearchResult(query, start, end);
 
                 SearchItems.Clear();
                 foreach (var item in result)
                 {
                     SearchItems.Add(item);
                 }
+                ShowFilters = false;
             }
             catch (Exception ex)
             {
@@ -70,6 +88,12 @@ namespace NasaImageLibraryMAUIApp.ViewModels
             };
 
             await Shell.Current.GoToAsync(nameof(DetailsPage), navParameter);
+        }
+
+        [RelayCommand]
+        private void ToggleFilters()
+        {
+            ShowFilters = !ShowFilters;
         }
     }
 }

@@ -16,11 +16,21 @@ namespace NasaImageLibraryMAUIApp.Services
         }
 
 
-        public async Task<IReadOnlyList<SearchItem>> GetSearchResult(string query, CancellationToken ct = default)
+        public async Task<IReadOnlyList<SearchItem>> GetSearchResult(
+            string query, 
+            int? startYear = null, 
+            int? endYear = null, 
+            CancellationToken ct = default)
         {
             var encodedQuery = Uri.EscapeDataString(query);
 
-            var url = $"search?q={encodedQuery}&media_type=image";
+            var sb = new StringBuilder($"search?q={encodedQuery}&media_type=image");
+            
+            if (startYear.HasValue) sb.Append($"&year_start={startYear.Value}");
+
+            if(endYear.HasValue) sb.Append($"&year_end={endYear.Value}");
+            
+            var url = sb.ToString();
 
             using var response = await http.GetAsync(url, ct);
 

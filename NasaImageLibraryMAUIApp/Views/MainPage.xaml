@@ -10,12 +10,55 @@
 
     <Grid RowDefinitions="Auto, *">
 
-        <SearchBar Grid.Row="0"
-                   Placeholder="Search (e.g. Orion, Apollo)"
+        <VerticalStackLayout Grid.Row="0" BackgroundColor="{AppThemeBinding Light=White, Dark=#1e1e1e}" Padding="10">
+
+            <Grid ColumnDefinitions="*, Auto">
+                <SearchBar Grid.Column="0"
+                   Placeholder="Search (e.g. nebula, earth)"
                    Text="{Binding SearchQuery}"
-                   SearchCommand="{Binding PerformSearchCommand}"
-                   BackgroundColor="{AppThemeBinding Light=White, Dark=#1e1e1e}"
-                   Margin="10"/>
+                   SearchCommand="{Binding PerformSearchCommand}"/>
+
+                <Button Grid.Column="1"
+                Text="⚙️Filter year"
+                Command="{Binding ToggleFiltersCommand}"
+                BackgroundColor="Transparent"
+                TextColor="{AppThemeBinding Light=Black, Dark=White}"
+                HeightRequest="40"/>
+            </Grid>
+
+            <Grid ColumnDefinitions="*, *"
+                  RowDefinitions="Auto, Auto"
+                  ColumnSpacing="10" 
+                  IsVisible="{Binding ShowFilters}"
+                  Padding="0,10,0,0">
+
+                <VerticalStackLayout Grid.Column="0" Grid.Row="0">
+                    <Label Text="Start Year" FontSize="12" TextColor="Gray"/>
+                    <Entry Placeholder="e.g. 1969" 
+                           Text="{Binding StartYear}"
+                           Keyboard="Numeric"
+                           MaxLength="4"
+                           ReturnType="Search"
+                           ReturnCommand="{Binding PerformSearchCommand}"/>
+                </VerticalStackLayout>
+
+                <VerticalStackLayout Grid.Column="1" Grid.Row="0">
+                    <Label Text="End Year" FontSize="12" TextColor="Gray"/>
+                    <Entry Placeholder="e.g. 2026" 
+                           Text="{Binding EndYear}"
+                           Keyboard="Numeric"
+                           MaxLength="4"
+                           ReturnType="Search"
+                           ReturnCommand="{Binding PerformSearchCommand}"/>
+                </VerticalStackLayout>
+
+                <Button Grid.Column="0" Grid.Row="1"
+                        Grid.ColumnSpan="2"
+                        Text="Apply Filters &amp; Search"
+                        Command="{Binding PerformSearchCommand}"
+                        Margin="0,10,0,0"/>
+            </Grid>
+        </VerticalStackLayout>
 
         <CollectionView Grid.Row="1"
                         ItemsSource="{Binding SearchItems}"
