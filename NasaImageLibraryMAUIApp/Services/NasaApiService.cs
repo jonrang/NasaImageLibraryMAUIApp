@@ -47,8 +47,15 @@ namespace NasaImageLibraryMAUIApp.Services
                 var bestMatch = items.FirstOrDefault(x => x.Href.EndsWith("~medium.jpg"))
                     ?? items.FirstOrDefault(x => x.Href.EndsWith("~small.jpg"))
                     ?? items.FirstOrDefault();
+
+                string? originalUrl = bestMatch?.Href;
+
+                if (!string.IsNullOrEmpty(originalUrl) && originalUrl.StartsWith("http:"))
+                {
+                    return originalUrl.Replace("http:", "https:");
+                }
                 
-                return bestMatch?.Href;
+                return originalUrl;
             }
             catch
             {
