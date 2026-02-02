@@ -14,7 +14,7 @@ namespace NasaImageLibraryMAUIApp.ViewModels
         [ObservableProperty] private string searchQuery;
         [ObservableProperty] private bool isBusy;
 
-        private string[] defaultTerms = { "galaxy", "black hole", "astronaut", "iss", "jupiter" };
+        private string[] defaultTerms = { "galaxy", "black hole", "earth", "iss", "jupiter" };
         
         public MainViewModel(INasaApiService apiService)
         {
