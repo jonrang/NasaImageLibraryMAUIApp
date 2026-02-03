@@ -51,5 +51,19 @@ namespace NasaImageLibraryMAUIApp.ViewModels
         {
             await Shell.Current.GoToAsync("..");
         }
+
+        [RelayCommand]
+        private async Task ShareImage()
+        {
+            if (string.IsNullOrEmpty(HighResImageUrl))
+                return;
+
+            await Share.Default.RequestAsync(new ShareTextRequest
+            {
+                Uri = HighResImageUrl,              
+                Title = "Dela NASA-bild",          
+                Text = $"Kolla in den här bilden: {Title}" 
+            });
+        }
     }
 }

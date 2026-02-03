@@ -18,7 +18,7 @@ namespace NasaImageLibraryMAUIApp.ViewModels
         [ObservableProperty] string endYear;
         [ObservableProperty] bool showFilters;
 
-        private string[] defaultTerms = { "galaxy", "black hole", "earth", "iss", "jupiter" };
+        private string[] defaultTerms = { "Hubble Galaxies", "Hubble Nebulae", "black hole", "earth", "iss", "jupiter" };
 
         public MainViewModel(INasaApiService apiService)
         {
@@ -34,6 +34,12 @@ namespace NasaImageLibraryMAUIApp.ViewModels
         [RelayCommand]
         private async Task PerformSearch()
         {
+            if (Connectivity.Current.NetworkAccess != NetworkAccess.Internet)
+            {
+                await Shell.Current.DisplayAlertAsync("Ingen anslutning", "Kontrollera ditt internet och försök igen.", "OK");
+                return;
+            }
+
             if (string.IsNullOrWhiteSpace(SearchQuery)) return;
             if (IsBusy) return;
 

@@ -14,16 +14,16 @@
 
             <Grid ColumnDefinitions="*, Auto">
                 <SearchBar Grid.Column="0"
-                   Placeholder="Search (e.g. nebula, earth)"
-                   Text="{Binding SearchQuery}"
-                   SearchCommand="{Binding PerformSearchCommand}"/>
+                           Placeholder="Search (e.g. nebula, earth)"
+                           Text="{Binding SearchQuery}"
+                           SearchCommand="{Binding PerformSearchCommand}"/>
 
-                <Button Grid.Column="1"
-                Text="⚙️Filter year"
-                Command="{Binding ToggleFiltersCommand}"
-                BackgroundColor="Transparent"
-                TextColor="{AppThemeBinding Light=Black, Dark=White}"
-                HeightRequest="40"/>
+                <ImageButton Grid.Column="1"
+                             Source="date_range.png"
+                             Command="{Binding ToggleFiltersCommand}"
+                             BackgroundColor="Transparent"
+                             HeightRequest="24"
+                             WidthRequest="24"/>
             </Grid>
 
             <Grid ColumnDefinitions="*, *"
@@ -104,7 +104,7 @@
 
             <CollectionView.EmptyView>
                 <VerticalStackLayout VerticalOptions="Center" HorizontalOptions="Center">
-                    <Label Text="🚀" FontSize="50" HorizontalOptions="Center"/>
+                    <Image Source="rocket_launch.png" DesiredSize="50" HorizontalOptions="Center"/>
                     <Label Text="Start your search above!" FontSize="18" TextColor="Gray"/>
                 </VerticalStackLayout>
             </CollectionView.EmptyView>

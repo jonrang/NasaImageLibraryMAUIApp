@@ -7,6 +7,12 @@
              Title="Image Details"
              BackgroundColor="{AppThemeBinding Light=#f0f0f0, Dark=#121212}">
 
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="Dela "
+                     Command="{Binding ShareImageCommand}"
+                     Order="Primary"/>
+    </ContentPage.ToolbarItems>
+
     <ScrollView>
         <VerticalStackLayout Spacing="15" Padding="0,0,0,20">
 
@@ -36,7 +42,7 @@
                        FontSize="16"
                        LineHeight="1.2"
                        TextColor="{AppThemeBinding Light=#333, Dark=#ccc}"/>
-                
+
             </VerticalStackLayout>
 
             <Button Text="Go Back"
@@ -44,7 +50,7 @@
                     HorizontalOptions="Center"
                     WidthRequest="200"
                     Margin="0,20,0,0"/>
-            
+
         </VerticalStackLayout>
     </ScrollView>
 </ContentPage>
